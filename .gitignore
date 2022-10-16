@@ -1,0 +1,3 @@
+.vagrant/
+*.log
+container_registry.enc

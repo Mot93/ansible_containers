@@ -1,0 +1,19 @@
+- name: Copy the context onto the machine
+  ansible.builtin.copy:
+    src: "{{ container.dockerfile.context }}"
+    dest: /tmp/compile
+
+- name: Copy the docker file into the context
+  ansible.builtin.copy:
+    src: "{{ container.dockerfile.location }}{{ container.dockerfile.name }}"
+    dest: /tmp/compile
+
+- name: Compiling the container
+  community.docker.docker_image:
+    name: "{{ container.image.name }}"
+    state: present
+    source: build
+    build:
+      path: /tmp/compile/
+      dockerfile: "/tmp/compile/{{ container.dockerfile.name }}"
+    push: "{{ container.image.push }}"

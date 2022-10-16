@@ -1,0 +1,28 @@
+---
+- name: Container pipeline
+  hosts: all
+  become: yes
+  vars: 
+    project_location: ./container/
+
+  tasks:
+    - name: Start the docker daemon
+      ansible.builtin.systemd:
+        state: started
+        enabled: yes
+        name: docker
+
+    - name: Copy the project
+      ansible.builtin.copy:
+        src: "{{ project_location }}"
+        dest: /tmp/compose
+
+    - name: Cleaning previuos configurations
+      community.docker.docker_compose:
+        project_src: /tmp/compose
+        state: absent
+
+    - name: Launching the compose configuration
+      community.docker.docker_compose:
+        project_src: /tmp/compose
+        state: present

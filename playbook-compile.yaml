@@ -1,0 +1,40 @@
+---
+- name: Container pipeline
+  hosts: all
+  become: yes
+  vars:
+    containers_config: "compile/containers.yaml"
+
+  tasks:
+    - name: Loading the list of container to be compiled
+      ansible.builtin.include_vars:
+        file: "{{ containers_config }}"
+
+    - name: Start the docker daemon
+      ansible.builtin.systemd:
+        state: started
+        enabled: yes
+        name: docker
+
+    - name: Login into the container registry
+      community.docker.docker_login:
+        state: present
+        registry_url: "{{ container_registry.server }}"
+        username: "{{ container_registry.username }}"
+        password: "{{ container_registry.password }}"
+      when: login
+
+    - name: Compiling all containers
+      block:
+        - name: Compiling all containers
+          include_tasks: compile/compile-container.yaml
+          with_list: "{{ containers }}"
+          loop_control: 
+            loop_var: container
+            label: "{{ container.image.name }}"
+
+      always:
+        - name: Logout from the container registry
+          community.docker.docker_login:
+            state: absent
+          when: logout
