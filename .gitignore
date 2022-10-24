@@ -1,3 +1,4 @@
 .vagrant/
 *.log
 container_registry.enc
+ansible.cfg

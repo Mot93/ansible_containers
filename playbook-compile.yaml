@@ -27,7 +27,7 @@
     - name: Compiling all containers
       block:
         - name: Compiling all containers
-          include_tasks: compile/compile-container.yaml
+          include_tasks: compile-container.yaml
           with_list: "{{ containers }}"
           loop_control: 
             loop_var: container
