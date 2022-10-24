@@ -6,28 +6,6 @@ This project help create a jenkins server on a Debian/Ubuntu server.
 
         config.vm.network "public_network", type: "dhcp", bridge: "interface_name"
 
-2. Populate the `cluster.yaml` files whith the definition of all the servers you desire to have in the cluster.
-    An example of a 3 servers configuration:
-
-        severs:
-          - ip: 192.168.56.10
-            hostname: luke
-
-          - ip: 192.168.56.20
-            hostname: han
-
-          - ip: 192.168.56.30
-            hostname: leia
-
-    `ip`: the ip assign to the VM on the private network created by the virtualizator.
-
-    `hostname`: machine hostname
-
-3. Have Ansible installed on the host machine.
-    Also, install the Ansible role `nomad_consul_cluster`:
-
-        ansible-galaxy install git+https://github.com/Mot93/nomad_consul_cluster.git
-
 ## Creating the VM
 The VM can will be created by [Vagrant](https://www.vagrantup.com/).
 
